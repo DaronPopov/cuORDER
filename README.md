@@ -1,7 +1,7 @@
 # cuORDER CUDA Environment Resolver
 
 [![PyPI version](https://badge.fury.io/py/cuorder-cuda-env.svg)](https://pypi.org/project/cuorder-cuda-env/)
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A **locked-down but programmable** CUDA environment generator controlled through cuORDER configuration files. Generate optimized CUDA + Python + ML Docker environments with simple YAML configurations.
 
@@ -121,9 +121,50 @@ cuorder-cuda examples/basic_env.cuorder
 ## 📋 Requirements
 
 - Linux system
-- Docker installed & running
-- NVIDIA GPU (optional)
+- Docker installed **and running** (cuORDER does NOT auto-start Docker)
+- NVIDIA GPU (optional, but recommended for CUDA)
 - Python 3.8+
+
+## 🔧 Troubleshooting
+
+### Docker Issues
+
+**"Error: Docker is not running"**
+
+cuORDER does NOT automatically start Docker. Start it manually:
+
+```bash
+# Start Docker daemon
+sudo systemctl start docker
+
+# Add user to docker group (one-time setup)
+sudo usermod -aG docker $USER
+newgrp docker
+
+# Verify Docker works
+docker ps
+```
+
+### Build Issues
+
+**"manifest unknown" errors**
+
+This usually means the CUDA version is too new. cuORDER supports CUDA 11.8-12.2. Check your GPU compatibility:
+
+```bash
+cuorder-cuda --info
+```
+
+### Permission Issues
+
+**"permission denied" with Docker**
+
+Add your user to the docker group:
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
 
 ## 🤝 Contributing
 
