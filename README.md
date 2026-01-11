@@ -166,20 +166,10 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch
-3. Add cuORDER examples for new use cases
-4. Test with different hardware configurations
-5. Submit a pull request
 
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
----
-
-**Made with ❤️ for the CUDA + ML community**
-
-*Automate your CUDA environments with cuORDER - the programmable, locked-down way.*
+I was mad at installations so i solved them haha
