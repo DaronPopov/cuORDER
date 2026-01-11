@@ -1,0 +1,7 @@
+include README.md
+include LICENSE
+recursive-include cuorder *
+recursive-include examples *
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.pyo

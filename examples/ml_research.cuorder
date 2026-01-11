@@ -1,0 +1,39 @@
+# ML Research Environment - cuORDER Configuration
+# Advanced setup for machine learning research with CUDA
+
+cuda_env:
+  # Hardware detection
+  hardware_detection: true
+
+  # Output settings
+  output_dir: "ml_research_env"
+  generate_compose: true
+  include_examples: true
+
+  # Advanced Python/ML stack
+  python:
+    enabled: true
+    version: "3.11"
+    packages:
+      - numpy
+      - scipy
+      - pandas
+      - matplotlib
+      - seaborn
+      - scikit-learn
+      - torch
+      - torchvision
+      - torchaudio
+      - transformers
+      - datasets
+      - accelerate
+      - cupy
+      - jax[cuda]
+      - tensorflow[and-cuda]
+      - tensorboard
+      - jupyter
+      - jupyterlab
+      - notebook
+
+  # Verbose logging for debugging
+  log_level: 2

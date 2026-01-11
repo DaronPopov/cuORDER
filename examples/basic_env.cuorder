@@ -1,0 +1,26 @@
+# Basic CUDA Environment - cuORDER Configuration
+# This file defines a CUDA environment configuration for cuORDER
+
+cuda_env:
+  # Hardware detection settings
+  hardware_detection: true
+
+  # Output configuration
+  output_dir: "my_cuda_env"
+  generate_compose: true
+  include_examples: false
+
+  # Python and ML libraries
+  python:
+    enabled: true
+    version: "3.11"
+    packages:
+      - numpy
+      - torch
+      - torchvision
+      - torchaudio
+      - cupy
+      - transformers
+
+  # Logging and debugging
+  log_level: 1  # 0=ERROR, 1=INFO, 2=DEBUG

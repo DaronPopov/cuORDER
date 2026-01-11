@@ -1,0 +1,13 @@
+{
+  "hardware_script": "scripts/detect_hardware.sh",
+  "cuda_config_file": "config/cuda_compatibility.json",
+  "output_directory": "cuda_env_output",
+  "docker_base_path": "docker",
+  "python_version": "3.11",
+  "pip_packages": "numpy torch torchvision torchaudio cupy",
+  "log_level": 1,
+  "auto_detect": true,
+  "generate_compose": true,
+  "include_examples": false,
+  "include_python": true
+}
