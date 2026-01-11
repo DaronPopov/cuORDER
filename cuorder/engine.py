@@ -150,6 +150,51 @@ class CuOrderEngine:
                         if 'docker-entrypoint.sh' in dockerfile_content and not os.path.exists(entrypoint_dst):
                             shutil.copy2(entrypoint_src, entrypoint_dst)
                             print(f"📋 Copied docker-entrypoint.sh to output directory")
+                    
+                    # Fix Dockerfile: Remove redundant CUDA package installations
+                    # The base -devel image already includes CUDA, so we don't need to install it
+                    import re
+                    original_content = dockerfile_content
+                    
+                    # Remove the entire "Standard CUDA installation" RUN block
+                    # Pattern: from "# Standard CUDA installation" comment to the end of that RUN command
+                    pattern = r'# Standard CUDA installation.*?RUN apt-get update && apt-get install -y[^\n]*\n(?:[^\n]*cuda-[^\n]*\n)*[^\n]*&& rm -rf /var/lib/apt/lists/\*\s*\n'
+                    fixed_content = re.sub(pattern, '', dockerfile_content, flags=re.DOTALL)
+                    
+                    # Also remove any standalone CUDA package install lines
+                    lines = fixed_content.split('\n')
+                    filtered_lines = []
+                    skip_block = False
+                    
+                    for i, line in enumerate(lines):
+                        # Detect start of CUDA install block
+                        if 'Standard CUDA installation' in line or ('CUDA installation' in line and '#' in line):
+                            skip_block = True
+                            continue
+                        
+                        # Skip lines in CUDA install block
+                        if skip_block:
+                            if 'cuda-toolkit-' in line or 'cuda-runtime-' in line or 'cuda-samples-' in line or 'cuda-documentation-' in line:
+                                continue
+                            if '&& rm -rf /var/lib/apt/lists/*' in line:
+                                skip_block = False
+                                continue
+                            if line.strip().startswith('RUN apt-get') and 'cuda-' in line:
+                                # This is the RUN command, skip it
+                                continue
+                            if not line.strip() or line.strip().startswith('#'):
+                                if skip_block:
+                                    continue
+                        
+                        filtered_lines.append(line)
+                    
+                    fixed_content = '\n'.join(filtered_lines)
+                    
+                    # Write fixed Dockerfile if changed
+                    if fixed_content != original_content:
+                        with open(dockerfile_path, 'w') as f:
+                            f.write(fixed_content)
+                        print(f"🔧 Fixed Dockerfile: Removed redundant CUDA package installations (base image already includes CUDA)")
 
                 print(f"\n✅ CUDA environment deployed to: {output_dir}")
                 print("📁 Generated files:")
