@@ -138,6 +138,19 @@ class CuOrderEngine:
             success = self.execute_cuda_resolver(temp_config, output_dir)
 
             if success:
+                # Ensure docker-entrypoint.sh is copied if Dockerfile references it
+                entrypoint_src = self.docker_dir / "docker-entrypoint.sh"
+                entrypoint_dst = os.path.join(output_dir, "docker-entrypoint.sh")
+                dockerfile_path = os.path.join(output_dir, "Dockerfile.cuda")
+                
+                # Check if Dockerfile references entrypoint and copy it if missing
+                if entrypoint_src.exists() and os.path.exists(dockerfile_path):
+                    with open(dockerfile_path, 'r') as f:
+                        dockerfile_content = f.read()
+                        if 'docker-entrypoint.sh' in dockerfile_content and not os.path.exists(entrypoint_dst):
+                            shutil.copy2(entrypoint_src, entrypoint_dst)
+                            print(f"📋 Copied docker-entrypoint.sh to output directory")
+
                 print(f"\n✅ CUDA environment deployed to: {output_dir}")
                 print("📁 Generated files:")
                 for file in os.listdir(output_dir):

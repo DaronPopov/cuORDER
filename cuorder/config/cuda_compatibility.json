@@ -11,22 +11,22 @@
       "min_driver": "525.60.13",
       "max_driver": "525.60.13",
       "supported_compute_capabilities": ["5.0", "5.2", "5.3", "6.0", "6.1", "6.2", "7.0", "7.2", "7.5", "8.0", "8.6", "8.9", "9.0"],
-      "base_image": "nvidia/cuda:12.0-devel-ubuntu22.04",
-      "runtime_image": "nvidia/cuda:12.0-runtime-ubuntu22.04"
+      "base_image": "nvidia/cuda:12.0.0-devel-ubuntu22.04",
+      "runtime_image": "nvidia/cuda:12.0.0-runtime-ubuntu22.04"
     },
     "12.1": {
       "min_driver": "530.30.02",
       "max_driver": "530.30.02",
       "supported_compute_capabilities": ["5.0", "5.2", "5.3", "6.0", "6.1", "6.2", "7.0", "7.2", "7.5", "8.0", "8.6", "8.9", "9.0"],
-      "base_image": "nvidia/cuda:12.1-devel-ubuntu22.04",
-      "runtime_image": "nvidia/cuda:12.1-runtime-ubuntu22.04"
+      "base_image": "nvidia/cuda:12.1.0-devel-ubuntu22.04",
+      "runtime_image": "nvidia/cuda:12.1.0-runtime-ubuntu22.04"
     },
     "12.2": {
       "min_driver": "535.54.03",
       "max_driver": "535.54.03",
       "supported_compute_capabilities": ["5.0", "5.2", "5.3", "6.0", "6.1", "6.2", "7.0", "7.2", "7.5", "8.0", "8.6", "8.9", "9.0"],
-      "base_image": "nvidia/cuda:12.2-devel-ubuntu22.04",
-      "runtime_image": "nvidia/cuda:12.2-runtime-ubuntu22.04"
+      "base_image": "nvidia/cuda:12.2.0-devel-ubuntu22.04",
+      "runtime_image": "nvidia/cuda:12.2.0-runtime-ubuntu22.04"
     }
   },
   "compute_capability_defaults": {
