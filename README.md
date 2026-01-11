@@ -8,6 +8,9 @@ A **locked-down but programmable** CUDA environment generator controlled through
 ## 🚀 Quick Start
 
 ```bash
+
+# Clone the repo
+git clone https://github.com/DaronPopov/cuORDER
 # Install
 pip install cuorder-cuda-env
 
