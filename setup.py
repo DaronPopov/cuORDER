@@ -8,36 +8,33 @@ from setuptools import setup, find_packages
 import os
 import shutil
 
-# Copy the compiled binary to package data
+# Check the compiled binary is available
 def copy_binary():
-    """Copy the compiled CUDA resolver binary to package"""
-    binary_src = "../cuda_env_resolver"
-    binary_dst = "cuorder/bin/cuda_env_resolver"
+    """Ensure the CUDA resolver binary is available"""
+    binary_path = "cuorder/bin/cuda_env_resolver"
 
-    if os.path.exists(binary_src):
-        os.makedirs(os.path.dirname(binary_dst), exist_ok=True)
-        shutil.copy2(binary_src, binary_dst)
-        # Make executable
-        os.chmod(binary_dst, 0o755)
-        print(f"Copied binary: {binary_src} -> {binary_dst}")
+    if os.path.exists(binary_path):
+        # Make sure it's executable
+        os.chmod(binary_path, 0o755)
+        print(f"✅ Binary ready: {binary_path}")
     else:
-        print(f"Warning: Binary not found at {binary_src}")
+        print(f"❌ Warning: Binary not found at {binary_path}")
+        print("Run 'make' in the cuda_env_resolver directory first")
 
-# Copy essential config/data files
+# Check essential config/data files
 def copy_assets():
-    """Copy configuration and data files"""
+    """Ensure configuration and data files are available"""
     assets = [
-        ("../config", "cuorder/config"),
-        ("../scripts", "cuorder/scripts"),
-        ("../docker", "cuorder/docker")
+        "cuorder/config",
+        "cuorder/scripts",
+        "cuorder/docker"
     ]
 
-    for src, dst in assets:
-        if os.path.exists(src):
-            if os.path.exists(dst):
-                shutil.rmtree(dst)
-            shutil.copytree(src, dst)
-            print(f"Copied assets: {src} -> {dst}")
+    for asset in assets:
+        if os.path.exists(asset):
+            print(f"✅ Assets ready: {asset}")
+        else:
+            print(f"❌ Warning: Assets not found at {asset}")
 
 if __name__ == "__main__":
     copy_binary()

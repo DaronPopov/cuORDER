@@ -19,6 +19,7 @@ def main():
 
     parser.add_argument(
         'cuorder_file',
+        nargs='?',
         help='Path to .cuorder configuration file (YAML or JSON)'
     )
 
@@ -54,6 +55,9 @@ def main():
             print(f"Docker Available: {'✅' if info['docker_available'] else '❌'}")
             print(f"Available CUDA Versions: {', '.join(info['available_cuda_versions'])}")
             return
+
+        if not args.cuorder_file:
+            parser.error("cuorder_file is required unless --info is used")
 
         # Load and validate cuORDER file
         print(f"📄 Loading cuORDER file: {args.cuorder_file}")

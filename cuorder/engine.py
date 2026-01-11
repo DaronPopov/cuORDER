@@ -25,10 +25,10 @@ class CuOrderEngine:
     def load_cuorder_file(self, cuorder_path: str) -> Dict[str, Any]:
         """Load and parse a .cuorder configuration file"""
         with open(cuorder_path, 'r') as f:
-            if cuorder_path.endswith('.yaml') or cuorder_path.endswith('.yml'):
+            if cuorder_path.endswith('.yaml') or cuorder_path.endswith('.yml') or cuorder_path.endswith('.cuorder'):
                 config = yaml.safe_load(f)
             else:
-                # Assume JSON for now, could extend to other formats
+                # Assume JSON for files without specific extensions
                 import json
                 config = json.load(f)
 
@@ -126,10 +126,13 @@ class CuOrderEngine:
         temp_config = self.generate_temp_config(cuorder_config)
 
         try:
-            # Determine output directory
+            # Determine output directory - always relative to user's current working directory
             output_dir = cuorder_config['cuda_env']['output_dir']
             if target_dir:
                 output_dir = os.path.join(target_dir, output_dir)
+            else:
+                # Make sure output is relative to user's current working directory
+                output_dir = os.path.join(os.getcwd(), output_dir)
 
             # Execute CUDA resolver
             success = self.execute_cuda_resolver(temp_config, output_dir)
