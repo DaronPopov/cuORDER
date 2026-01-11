@@ -135,15 +135,6 @@ cuorder-cuda --info
 
 ## Installation Options
 
-**From PyPI:**
-```bash
-pip install cuorder-cuda-env
-```
-
-**From GitHub:**
-```bash
-pip install git+https://github.com/DaronPopov/cuORDER.git
-```
 
 **From Source:**
 ```bash
