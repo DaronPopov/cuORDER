@@ -2,60 +2,50 @@
 
 **Stop fighting CUDA versions. Let cuORDER handle it.**
 
-Automatically generate working CUDA + Python + ML Docker environments. Works across different PCs with different GPUs - same config, different environments tailored to each machine.
-
-## Why cuORDER?
-
-- ✅ **Auto-detects your GPU** and picks the right CUDA version
-- ✅ **Same YAML config** works on all your machines (different GPUs = different environments)
-- ✅ **No manual CUDA compatibility checking** - it just works
-- ✅ **Generates working Dockerfiles** ready to build
+Automatically generate working CUDA + Python + ML Docker environments tailored to your specific machine.
 
 ## Quick Start (3 steps)
 
 ### 1. Install
 
 ```bash
-# Install Docker (if not already installed)
-sudo apt update && sudo apt install -y docker.io
-sudo systemctl start docker
-sudo usermod -aG docker $USER
-newgrp docker  # or logout/login
-
-# Install cuORDER
 pip install cuorder-cuda-env
 ```
 
-### 2. Create Config
+### 2. Create Config (`my_env.cuorder`)
 
-Create `my_env.cuorder`:
 ```yaml
 cuda_env:
   hardware_detection: true
   output_dir: "my_cuda_env"
   python:
-    enabled: true
-    version: "3.11"
-    packages: [numpy, torch, torchvision, torchaudio]
+    packages: [numpy, torch, transformers]
 ```
 
 ### 3. Generate & Build
 
 ```bash
-# Generate environment (auto-detects your GPU)
+# Generate (auto-detects your GPU & sets up Docker)
 cuorder-cuda my_env.cuorder
 
-# Build it
+# Build & Run
 cd my_cuda_env
 ./build_cuda_env.sh
-
-# Run it
-docker run --rm -it --runtime=nvidia cuda-env:12.2
 ```
 
-**Done!** You now have a working CUDA environment. 🎉
+## Why it's magic ✨
 
-## Multi-PC Magic
+- ✅ **Smart Hardware Detection**: Picks the optimal CUDA version for your GPU/Driver.
+- ✅ **Auto-fixes Dockerfiles**: Cleans up redundant packages and fixes entrypoints.
+- ✅ **Works Everywhere**: The same config works on a 1080, 3070, or 4090.
+- ✅ **Permission Helper**: Detects Docker permission issues and tells you how to fix them.
+
+## Commands
+
+```bash
+cuorder-cuda --info              # Test system, permissions, and available CUDA
+cuorder-cuda config.cuorder      # Generate your environment
+```
 
 The same `.cuorder` file works on different machines:
 

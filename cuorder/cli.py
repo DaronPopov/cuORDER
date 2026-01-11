@@ -53,6 +53,16 @@ def main():
             print(f"Config Available: {'✅' if info['config_available'] else '❌'}")
             print(f"Scripts Available: {'✅' if info['scripts_available'] else '❌'}")
             print(f"Docker Available: {'✅' if info['docker_available'] else '❌'}")
+            
+            if info['docker_available']:
+                perm_status = "✅" if info['docker_permission'] else "❌ (Permission Denied)"
+                print(f"Docker Permission: {perm_status}")
+                print(f"Docker Compose:   {info['compose_cmd']}")
+                
+                if not info['docker_permission']:
+                    print("\n💡 Tip: To fix Docker permissions, run:")
+                    print(f"   sudo usermod -aG docker $USER && newgrp docker")
+            
             print(f"Available CUDA Versions: {', '.join(info['available_cuda_versions'])}")
             return
 
@@ -77,8 +87,17 @@ def main():
         target_dir = args.output if args.output else None
 
         if engine.deploy_environment(config, target_dir):
+            info = engine.get_system_info()
+            compose_cmd = info['compose_cmd']
+            
             print("\n🎉 Success! Your CUDA environment is ready.")
-            print("💡 Run './build_cuda_env.sh' in the output directory to build the container.")
+            print(f"💡 To build and run:")
+            print(f"   cd {config['cuda_env']['output_dir']}")
+            print(f"   ./build_cuda_env.sh")
+            print(f"   {compose_cmd} -f docker-compose.cuda.yml up -d")
+            
+            if not info['docker_permission']:
+                print("\n⚠️ Note: You might need to use 'sudo' or fix Docker permissions via 'newgrp docker'.")
         else:
             print("\n❌ Failed to deploy CUDA environment.")
             sys.exit(1)

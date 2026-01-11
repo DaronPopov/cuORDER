@@ -22,6 +22,29 @@ class CuOrderEngine:
         self.scripts_dir = self.package_dir / "scripts"
         self.docker_dir = self.package_dir / "docker"
 
+    def check_docker_permission(self) -> bool:
+        """Check if the current user has permission to use Docker"""
+        try:
+            # Try to run 'docker info' which requires daemon access
+            subprocess.run(['docker', 'info'], capture_output=True, check=True)
+            return True
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            return False
+
+    def get_compose_command(self) -> str:
+        """Detect available docker compose command (V2 plugin or V1 binary)"""
+        try:
+            # Check for Docker Compose V2 (plugin)
+            subprocess.run(['docker', 'compose', 'version'], capture_output=True, check=True)
+            return "docker compose"
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            try:
+                # Check for Docker Compose V1 (standalone binary)
+                subprocess.run(['docker-compose', '--version'], capture_output=True, check=True)
+                return "docker-compose"
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                return "docker-compose" # Default fallback
+
     def load_cuorder_file(self, cuorder_path: str) -> Dict[str, Any]:
         """Load and parse a .cuorder configuration file"""
         with open(cuorder_path, 'r') as f:
@@ -233,6 +256,8 @@ class CuOrderEngine:
             'config_available': self.config_dir.exists(),
             'scripts_available': self.scripts_dir.exists(),
             'docker_available': self.docker_dir.exists(),
+            'docker_permission': self.check_docker_permission(),
+            'compose_cmd': self.get_compose_command(),
             'available_cuda_versions': self.list_available_cuda_versions()
         }
         return info
