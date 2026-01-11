@@ -1,7 +1,7 @@
 # cuORDER CUDA Environment Resolver
 
 [![PyPI version](https://badge.fury.io/py/cuorder-cuda-env.svg)](https://pypi.org/project/cuorder-cuda-env/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 A **locked-down but programmable** CUDA environment generator controlled through cuORDER configuration files. Generate optimized CUDA + Python + ML Docker environments with simple YAML configurations.
 
