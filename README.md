@@ -2,7 +2,10 @@
 
 **Stop fighting CUDA versions. Let cuORDER handle it.**
 
-Automatically generate working CUDA + Python + ML Docker environments tailored to your specific machine.
+Automatically generate working CUDA + Python + ML Docker environments tailored to your specific machine. 
+
+> [!IMPORTANT]
+> **Prerequisites:** This tool automates the configuration for the **NVIDIA Container Toolkit**. You must have an NVIDIA GPU, NVIDIA Drivers, and the NVIDIA Docker runtime installed on your host machine to run the generated environments.
 
 ## Quick Start (3 steps)
 
