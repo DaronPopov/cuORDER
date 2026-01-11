@@ -3,15 +3,69 @@
 [![PyPI version](https://badge.fury.io/py/cuorder-cuda-env.svg)](https://pypi.org/project/cuorder-cuda-env/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A **locked-down but programmable** CUDA environment generator controlled through cuORDER configuration files. Generate optimized CUDA + Python + ML Docker environments with simple YAML configurations.
+**Automatically generate optimized CUDA + Python + ML Docker environments from simple YAML files.**
+
+cuORDER is a programmable system that detects your hardware and creates perfectly configured CUDA development environments. No more struggling with CUDA versions, driver compatibility, or complex Docker setups - just write a YAML file and let cuORDER handle the rest.
 
 ## 🚀 Quick Start
 
-```bash
-# Install
-pip install cuorder-cuda-env
+Follow these steps to get your CUDA environment up and running:
 
-# Create your environment config
+### Step 1: Install Dependencies
+
+```bash
+# Install system dependencies
+sudo apt update
+sudo apt install -y build-essential docker.io
+
+# Start Docker service
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Add your user to docker group (logout/login after this)
+sudo usermod -aG docker $USER
+```
+
+### Step 2: Install cuORDER
+
+**Option A: Install from PyPI (Recommended)**
+```bash
+pip install cuorder-cuda-env
+```
+
+**Option B: Install from GitHub**
+```bash
+pip install git+https://github.com/DaronPopov/cuORDER.git
+```
+
+**Option C: Clone and Install Locally**
+```bash
+# Clone the repository
+git clone https://github.com/DaronPopov/cuORDER.git
+cd cuORDER
+
+# Build and install
+./build_wheel.sh
+pip install dist/cuorder_cuda_env-*.whl
+```
+
+### Step 3: Verify Installation
+
+```bash
+# Check that cuORDER is installed
+cuorder-cuda --info
+
+# You should see output like:
+# 🔍 cuORDER CUDA Environment Resolver
+# Binary Available: ✅
+# Config Available: ✅
+# Available CUDA Versions: 11.8, 12.0, 12.1, 12.2
+```
+
+### Step 4: Create Your CUDA Environment
+
+```bash
+# Create a cuORDER configuration file
 cat > my_cuda_env.cuorder << 'EOF'
 cuda_env:
   hardware_detection: true
@@ -21,15 +75,93 @@ cuda_env:
     version: "3.11"
     packages: [numpy, torch, torchvision, torchaudio]
 EOF
-
-# Generate your CUDA environment
-cuorder-cuda my_cuda_env.cuorder
-
-# Build the container
-cd my_cuda_env && ./build_cuda_env.sh
 ```
 
-**That's it!** You get a Docker container perfectly optimized for your hardware.
+### Step 5: Generate Your Environment
+
+```bash
+# Generate the CUDA environment
+cuorder-cuda my_cuda_env.cuorder
+
+# This will create a 'my_cuda_env' directory with:
+# - Dockerfile.cuda (your custom CUDA container)
+# - build_cuda_env.sh (build script)
+# - docker-compose.cuda.yml (multi-container setup)
+# - .cuda_env (configuration file)
+```
+
+### Step 6: Build and Run
+
+```bash
+# Navigate to the generated environment
+cd my_cuda_env
+
+# Build your CUDA container (this may take a few minutes)
+./build_cuda_env.sh
+
+# Your container is now ready! Run it with:
+docker run --rm --runtime=nvidia -it your_cuda_env
+```
+
+### Step 7: Verify Everything Works
+
+```bash
+# Inside the container, test CUDA:
+nvidia-smi
+
+# Test Python and your installed packages:
+python3 -c "import torch; print('CUDA available:', torch.cuda.is_available())"
+```
+
+**🎉 Congratulations!** You now have a fully optimized CUDA environment with Python and ML libraries!
+
+## 🎛️ How cuORDER Works
+
+cuORDER uses a **unique programmable approach**:
+
+1. **YAML Configuration Files**: Define your environment requirements in simple `.cuorder` files
+2. **Hardware Auto-Detection**: Automatically detects your GPU/CPU and selects optimal CUDA versions
+3. **Locked-Down Core**: Immutable C binary ensures security and consistency
+4. **Docker Generation**: Creates production-ready containers with all dependencies
+5. **One-Click Deployment**: Build scripts handle the complex setup automatically
+
+### Example cuORDER Files
+
+**Basic CUDA Setup:**
+```yaml
+cuda_env:
+  hardware_detection: true
+  python:
+    enabled: true
+    packages: [numpy, torch]
+```
+
+**ML Research Environment:**
+```yaml
+cuda_env:
+  hardware_detection: true
+  python:
+    enabled: true
+    packages:
+      - numpy
+      - torch
+      - torchvision
+      - transformers
+      - jupyter
+```
+
+**Enterprise Setup:**
+```yaml
+cuda_env:
+  hardware_detection: false  # Use specific versions
+  cuda_version: "12.2"
+  python:
+    enabled: true
+    version: "3.11"
+    packages: [tensorflow, pytorch, jax]
+```
+
+Each `.cuorder` file produces a complete, reproducible environment!
 
 ## 📋 What It Does
 
